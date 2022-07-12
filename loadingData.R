@@ -1,5 +1,4 @@
 #### Load in csv file ####
-x <- 5
 
 student_data <- read.csv("data/students_performance.csv")
 View(student_data)
