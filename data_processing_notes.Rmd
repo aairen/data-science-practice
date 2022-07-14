@@ -138,6 +138,9 @@ select(starwars, starts_with("s"), ends_with("color"))
 
 rename(starwars, birthYear = birth_year)
 
+## We can use select() to reorder columns
+select(starwars, species, everything())
+
 ### Practice!!
 
 ## Select out the homeworld and species for the starwars dataset. What question might this subset of variables help answer?
@@ -177,5 +180,78 @@ transmute(starwars_small,
 ## using aggregate functions
 prop_mass <- mutate(starwars_small, proportional_mass = mass/sum(mass, na.rm = T))
 arrange(prop_mass, desc(proportional_mass))
+
+```
+
+### Summarizing and grouping data
+
+`summarize()` collapses an entire column of data to a single value
+
+```{r}
+
+mutate(starwars, mean_mass = mean(mass, na.rm = T))
+summarise(starwars, 
+          mean_mass = mean(mass, na.rm = T),
+          mean_height = mean(height, na.rm = T))
+
+mean(starwars$mass, na.rm = T)
+
+species_masses <- summarise(group_by(starwars, species),
+          mean_mass = mean(mass, na.rm = T),
+          count = n()) # n() returns the number of values in each species
+
+arrange(species_masses, desc(mean_mass))
+
+
+# the pipe operator %>%
+# function(x, y) is the same as x %>% function(y)
+# When using dplyr functions, generally always start with dataset
+species_masses <- starwars %>%
+  group_by(species) %>%
+  summarise(mean_mass = mean(mass, na.rm = T),
+          count = n()) %>%
+  arrange(desc(mean_mass))
+
+species_masses
+
+
+
+```
+
+### Sampling a designated nunmber of rows
+`sample_n()` allows us to sample a random number of rows from our dataset. Sampling is random.
+
+```{r}
+
+# 10 random rows
+starwars_10rows <- sample_n(starwars, 10)
+starwars_10rows
+
+# 10% of rows, selected randomly
+nrow(starwars) # total number of rows is 87
+starwars_10percent <- sample_frac(starwars, 0.1)
+starwars_10percent # 9 rows is 10%
+
+starwars %>%
+  group_by(gender) %>%
+  sample_n(4)
+
+starwars %>%
+  group_by(species) %>%
+  sample_n(1)
+
+```
+
+We can also take a "slice" of our dataset using `slice()` and its related set of functions. This retains the order of our rows in the dataset and is not random.
+
+```{r}
+
+slice(starwars, 50:60) # slice by index value (row number)
+
+slice_head(starwars, n = 10) # first 10 rows by index
+slice_tail(starwars, n = 10) # last 10 rows by index
+
+slice_min(starwars, order_by = mass, n = 15) # rows with lowest 15 mass
+slice_max(starwars, order_by = mass, n = 10) # rows with highest 10 mass
 
 ```
