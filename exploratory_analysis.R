@@ -22,7 +22,7 @@ ggplot(data = student_data, aes(x = math.score, y = reading.score, color = sex))
 View(student_data)
 names(student_data)
 
-student_data <- rename(student_data, sex = gender)
+  student_data <- rename(student_data, sex = gender)
 student_data <- select(student_data, sex, math.score:writing.score, race.ethnicity, parental.level.of.education, test.preparation.course, lunch)
 
 student_data_sample100 <- student_data %>%
@@ -36,3 +36,12 @@ student_data_sample100 <- student_data %>%
        fill = "Sex")
 
 student_data_sample100
+
+filter(student_data, test.preparation.course == "completed")
+
+student_scores = student_data %>%
+  mutate(cumulative.score = math.score + reading.score + writing.score) %>%
+  select(contains("score"))
+  
+View(student_score)
+
