@@ -158,7 +158,7 @@ library(Metrics)
 
 # calculate rmse between predictions and true values
 rmse(iris_test$Petal.Length, iris_test$lm_pred)
-rmse(iris_test$Petal.Length, iris_test$gbm_pred) #wins! smaller erorr
+rmse(iris_test$Petal.Length, iris_test$gbm_pred) #wins! smaller error
 
 # calculate moe between predictions and true values
 mae(iris_test$Petal.Length, iris_test$lm_pred)
@@ -173,8 +173,10 @@ true_vals <- sum(iris_test$glm_petal_cat == iris_test$petal_length_cat)
 total_vals <- nrow(iris_test)
 
 accuracy <- true_vals/total_vals #1! Great accuracy!
+accuracy
 
-
+# f1 score tells us about false positive & false negative rates
+f1(iris_test$glm_petal_cat, iris_test$petal_length_cat)
 
 
 
